@@ -1,0 +1,75 @@
+# ============================
+# Conda Lazy Loading
+# ============================
+function load_conda() {
+  unset -f load_conda
+  if [ -f "/opt/miniconda3/etc/profile.d/conda.sh" ]; then
+    source "/opt/miniconda3/etc/profile.d/conda.sh"
+  else
+    export PATH="/opt/miniconda3/bin:$PATH"
+  fi
+  conda activate base  # optional: remove if you do not want auto activation
+}
+alias conda='load_conda && conda'
+
+# ============================
+# PATH Management
+# ============================
+paths=(
+  "$HOME/.bun/bin"
+  "/opt/homebrew/opt/ruby/bin"
+  "$(gem environment gemdir)/bin"
+  "$HOME/Library/TinyTeX/bin"
+  "$HOME/development/flutter/bin"
+  "$HOME/Library/Android/sdk/emulator"
+  "$HOME/Library/Android/sdk/platform-tools"
+  "$HOME/flutter-sdk/flutter/bin"
+  "$HOME/.pub-cache/bin"
+  # Add additional paths below
+  # "/path/to/other/bin"
+)
+for p in "${paths[@]}"; do
+  if [[ -d $p ]] && [[ ":$PATH:" != *":$p:"* ]]; then
+    PATH="$p:$PATH"
+  fi
+done
+export PATH
+
+# ============================
+# Aliases
+# ============================
+alias frd="flutter run -d <device-id>"
+alias drbb="dart run build_runner build"
+
+# ============================
+# Key Bindings
+# ============================
+# For Option + Left/Right Arrow (ESC sequences)
+bindkey "\e[1;3D" backward-word
+bindkey "\e[1;3C" forward-word
+
+# ============================
+# fzf Integration
+# ============================
+if type fzf &>/dev/null; then
+  source <(fzf --zsh)
+fi
+
+# ============================
+# Environment Variables
+# ============================
+export BUN_INSTALL="$HOME/.bun"
+# export GOOGLE_API_KEY="your-google-api-key"  # Set your API keys securely elsewhere
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+
+export PATH="$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools"
+
+# Add other environment variables here
+#
+#
+
+# ============================
+# Tmux Auto Attach or New Session
+# ============================
+[ -z "$TMUX" ] && exec tmux new-session -A
+
