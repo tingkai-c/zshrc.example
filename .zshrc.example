@@ -71,5 +71,5 @@ export PATH="$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools"
 # ============================
 # Tmux Auto Attach or New Session
 # ============================
-[ -z "$TMUX" ] && exec tmux new-session -A
+# [ -z "$TMUX" ] && exec tmux new-session -A
 
